@@ -3,17 +3,17 @@ package model;
 import java.io.Serializable;
 
 public class Mutter implements Serializable {
-	private String name;
-	private String mutter;
+	private String userName;
+	private String text;
 	
 	public Mutter () {}
 		
-	public Mutter (String name, String mutter) {
-		this.name = name;
-		this.mutter = mutter;
+	public Mutter (String userName, String text) {
+		this.userName = userName;
+		this.text = text;
 	}
 	
-	public String getName () { return name; }
-	public String getMutter () { return mutter; }
+	public String getName () { return userName; }
+	public String gettext () { return text; }
 
 }
