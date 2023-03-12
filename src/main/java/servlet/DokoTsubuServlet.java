@@ -8,6 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.Login;
+import model.LoginLogic;
+import model.User;
 /**
  * Servlet implementation class DokoTsubuServlet
  */
@@ -21,8 +26,8 @@ public class DokoTsubuServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 
+		// フォワード
 		String forwardPath = "WEB-INF/jsp/index.jsp";
-		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
 		dispatcher.forward(request, response);
 	}
@@ -32,8 +37,27 @@ public class DokoTsubuServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		request.setCharacterEncoding("UTF-8");
+		String user_name = request.getParameter("user_name");
+		String pass = request.getParameter("pass");
+
+		// ログインしているユーザー名とパスワードをセッションスコープで保持
+		User loginingUser = new User(user_name, pass);
+		HttpSession session = request.getSession();
+		session.setAttribute("loginingUser", loginingUser);
+		
+		// ログインできるかどうかを判断するモデル
+		LoginLogic logic = new LoginLogic();
+		
+		// ログインに成功したかどうかをリクエストスコープで保持
+		Login canLogin = new Login(logic.execute(loginingUser));
+		request.setAttribute("canLogin", canLogin);
+		
+		// フォワード
+		String forwardPath = "WEB-INF/jsp/loginResult.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
+		dispatcher.forward(request, response);
 	}
 
 }
