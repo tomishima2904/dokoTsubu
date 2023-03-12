@@ -11,4 +11,5 @@ public class Login implements Serializable {
 	}
 	
 	public void setCanLogin(boolean canLogin) { this.canLogin = canLogin; }
+	public boolean getCanLogin() { return canLogin; }
 }
