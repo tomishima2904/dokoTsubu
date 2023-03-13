@@ -1,13 +1,20 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.Mutter;
+import model.User;
 
 
 @WebServlet("/Main")
@@ -18,10 +25,26 @@ public class Main extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		
-		// フォワード
-		String forwardPath = "WEB-INF/jsp/main.jsp";
-		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
-		dispatcher.forward(request, response);
+		ServletContext application = this.getServletContext();
+		
+		List<Mutter> mutterList = (List<Mutter>)application.getAttribute("mutterList");
+		
+		if (mutterList == null) {
+			mutterList = new ArrayList<>();
+			application.setAttribute("mutterList", mutterList);
+		}
+		
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginingUser");
+		
+		if (loginUser == null) {
+			response.sendRedirect("index.jsp");
+		}else {
+			// フォワード
+			String forwardPath = "WEB-INF/jsp/main.jsp";
+			RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
+			dispatcher.forward(request, response);
+		}
 	}
 
 	/**
