@@ -27,7 +27,7 @@ public class DokoTsubuServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// フォワード
-		String forwardPath = "WEB-INF/jsp/index.jsp";
+		String forwardPath = "index.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forwardPath);
 		dispatcher.forward(request, response);
 	}
